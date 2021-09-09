@@ -20,4 +20,18 @@ class Markups():
         btn4 = types.KeyboardButton('Очень редко или никогда')
         markup2.add(btn1, btn2, btn3, btn4)
         return markup2
+
+    def start_markup():
+        start_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        btn_start = types.KeyboardButton('Начать тест')
+        btn_info = types.KeyboardButton('Информация')
+        start_markup.add(btn_start, btn_info)
+        return start_markup
     
+
+    def info_markup():
+        info_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        btn_back = types.KeyboardButton('Назад')
+        btn_info = types.KeyboardButton('Something')
+        info_markup.add(btn_back, btn_info)
+        return info_markup    
