@@ -15,6 +15,9 @@ class Defenitor:
     def add_1(self):
         self.value += 1
 
+    def add(self, num):
+        self.value += num
+
 
     def get_value(self):
         return self.value
@@ -22,3 +25,14 @@ class Defenitor:
 
     def set_to_zero(self):
         self.value = 0
+
+    
+    def get_result(self):
+        if self.value >= 31:
+            return "Вероятность наличия у Вас депрессии крайне велика! Незамедлительно обратитесь к врачу-неврологу."
+        elif 27 <= self.value <= 30:
+            return "Да, у Вас, скорее всего, депрессия. Рекомендуем не откладывать визит к врачу-неврологу."
+        elif 18 <= self.value <= 26:
+            return "Возможно у Вас депрессия. Рекомендуем обратитесь к врачу-неврологу."
+        elif 0 <= self.value <= 17:
+            return "Поздравляем! У Вас нет признаков депрессии."
