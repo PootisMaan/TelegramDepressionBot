@@ -15,6 +15,7 @@ class Defenitor:
     def add_1(self):
         self.value += 1
 
+        
     def add(self, num):
         self.value += num
 
