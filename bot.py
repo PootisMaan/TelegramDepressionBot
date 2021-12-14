@@ -2,7 +2,6 @@
 # GitHub: https://github.com/PootisMaan/TelegramDepressionBot
 
 import telebot
-
 from markups import Markups
 from source import CalculationSystem
 
@@ -10,7 +9,7 @@ result = CalculationSystem()
 
 bot = telebot.TeleBot("1991005309:AAEEhZDkMthxz6WntlUN0XA1ClpguWb9t7k")
 
-# Rewriteing this question to one markup may be useful af.
+# Rewriting this question to one markup may be useful af.
 questions = ["Я нервничаю по поводу того, что раньше меня не беспокоило",
              "Я не получаю удовольствия от еды, у меня плохой аппетит",
              "Несмотря на помощь друзей и членов моей семьи, мне не удается избавиться от чувства тоски",
@@ -33,8 +32,8 @@ questions = ["Я нервничаю по поводу того, что рань�
              "У меня нет сил и желания начинать что-либо делать", ]
 
 
-# 			Statemaents
-# Gettin rid of global var is essential.
+# 			Statements
+# Getting rid of global var is essential.
 def if_statement_markup1(message):
     global result
     if message.text == "Иногда":
@@ -55,7 +54,7 @@ def if_statement_markup2(message):
         result.add_3()
 
 
-# ========================   MAIN LOGIC   =====================================================================================================================
+# ========================   MAIN LOGIC   =============================================================================
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     message = bot.send_message(message.chat.id, f"<b>Привет {message.from_user.first_name}!</b>", parse_mode='html',
