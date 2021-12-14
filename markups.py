@@ -1,5 +1,5 @@
 from telebot import types
-import telebot
+
 
 class Markups():
 
@@ -27,11 +27,10 @@ class Markups():
         btn_info = types.KeyboardButton('Информация')
         start_markup.add(btn_start, btn_info)
         return start_markup
-    
 
     def info_markup():
         info_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
         btn_back = types.KeyboardButton('Назад')
         btn_info = types.KeyboardButton('Something')
         info_markup.add(btn_back, btn_info)
-        return info_markup    
+        return info_markup
