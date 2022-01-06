@@ -11,7 +11,6 @@ from source import CalculationSystem
 import Markups
 from models import *
 
-
 result = CalculationSystem()
 
 bot = telebot.TeleBot("1991005309:AAEEhZDkMthxz6WntlUN0XA1ClpguWb9t7k")
@@ -68,12 +67,14 @@ get_question = question_counter()
 
 
 # ========================   MAIN LOGIC   ==============================================================================
+# Sends first message/start command
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.send_message(message.chat.id, f"<b>Привет,  {message.from_user.first_name}!</b>", parse_mode='html')
     bot.send_message(message.chat.id, "Желаете начать тест?", reply_markup=Markups.start_markup)
 
 
+# Routes all the incoming text
 @bot.message_handler(content_types=['text'])
 def router(message):
     if message.text in ['Начать снова', 'Начать тест']:
@@ -83,10 +84,13 @@ def router(message):
         info(message)
     elif message.text in ['Об авторе бота']:
         author(message)
-    elif message.text in ['Сохранить резутьтат в базу', 'да', "Да"]:
+    elif message.text in ['qwerty']:
         save_result_db(message, 'test')
+    elif message.text in ['Посмотреть историю']:
+        parse_history(message, get_history(message))
 
 
+# Sends general info about the test
 def info(message):
     bot.send_message(message.chat.id, "Методика шкалы-опросника Центра эпидемиологических исследований депрессии "
                                       "CES-D (Center for Epidemiologic Studies Depression Scale) предназначена для "
@@ -108,12 +112,14 @@ def send_rules(message):
     sleep(1)
 
 
+# Shows the information about author
 def author(message):
     bot.send_message(message.chat.id, f"Привет!, это мой первый опыт написания Telegram бота код код можете"
                                       "посмотреть в Github: https://github.com/dborodin836/TelegramDepressionBot",
                      reply_markup=Markups.start_markup_cl)
 
 
+# Gives the result to user and saves it to db
 def get_result_and_again(message):
     evaluate(message)
     res = result.get_result()
@@ -121,10 +127,11 @@ def get_result_and_again(message):
     bot.send_message(message.chat.id, f"Желаете попробовать снова?", parse_mode='html',
                      reply_markup=Markups.start_markup)
     random.shuffle(questions)
-    save_result_ask(message)
+    # save_result_ask(message)
     save_result_db(message, res)
 
 
+# Starts the test
 def test(message):
     next_question = questions[get_question()]
     question_msg = bot.send_message(message.chat.id, next_question, reply_markup=Markups.answers_mark)
@@ -142,9 +149,25 @@ def save_result_db(message, string: str):
         logging.critical("Error while committing to db")
 
 
+def get_history(message):
+    query = Test.select().where(Test.user_id == message.from_user.id).order_by(Test.date.desc())
+    selected_results = query.dicts().execute()
+    return selected_results
+
+
+def parse_history(message, selected_results):
+    for element in selected_results:
+        send_history_user(message, element)
+
+
+# Gonna use it later
 def save_result_ask(message):
     bot.send_message(message.chat.id, "Хотите сохранить результат для последующего просмотра?",
                      reply_markup=Markups.save_result_markup)
+
+
+def send_history_user(message, dictionary):
+    bot.send_message(message.chat.id, f"{dictionary['result']} -- {dictionary['date']}")
 
 
 while True:
