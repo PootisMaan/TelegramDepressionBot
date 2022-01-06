@@ -63,21 +63,39 @@ get_question = question_counter()
 # ========================   MAIN LOGIC   ==============================================================================
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, f"<b>Привет {message.from_user.first_name}!</b>", parse_mode='html',
-                     reply_markup=Markups.start_markup)
-    bot.send_message(message.chat.id, "Желаете начать тест?")
+    bot.send_message(message.chat.id, f"<b>Привет, {message.from_user.first_name}!</b>", parse_mode='html')
+    bot.send_message(message.chat.id,
+                     "Ниже приведены вопросы, касающиеся Вашего самочувствия, активности, эмоционального состояния в "
+                     "течение последнего месяца. Выберите ответ, который наилучшим образом соответствует Вашему "
+                     "сегодняшнему состоянию.")
+    bot.send_message(message.chat.id, "Желаете начать тест?", reply_markup=Markups.start_markup)
 
 
 @bot.message_handler(content_types=['text'])
-def main(message):
+def router(message):
     if message.text in ['Начать снова', 'Начать тест']:
         test(message)
     elif message.text in ['Информация']:
         info(message)
+    elif message.text in ['Об авторе бота']:
+        author(message)
 
 
 def info(message):
-    bot.send_message(message.chat.id, f"<b>Some info!</b>", parse_mode='html', reply_markup=Markups.info_markup)
+    bot.send_message(message.chat.id, "Методика шкалы-опросника Центра эпидемиологических исследований депрессии "
+                                      "CES-D (Center for Epidemiologic Studies Depression Scale) предназначена для "
+                                      "скринингового выявления у пациентов депрессивного расстройства. Опросник "
+                                      "разработан в США в 1977 г. и на сегодняшний день наиболее часто используемый "
+                                      "в мире для проведения эпидемиологических исследований депрессии. Шкала "
+                                      "состоит из 20 пунктов, измеряющих депрессивные нарушения, отмечающиеся у "
+                                      "обследуемых за последние семь дней. Общий балл по данной шкале от 0 до 60 "
+                                      "отражает уровень депрессии.", parse_mode='html',
+                     reply_markup=Markups.info_markup)
+
+
+def author(message):
+    bot.send_message(message.chat.id, f"Привет!, это мой первый опыт написания Telegram бота код код можете"
+                                      "посмотреть в Github: https://github.com/dborodin836/TelegramDepressionBot")
 
 
 def get_result_and_again(message):
