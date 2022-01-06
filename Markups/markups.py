@@ -14,13 +14,13 @@ btn_start = types.KeyboardButton('Начать тест')
 btn_info = types.KeyboardButton('Информация')
 start_markup.add(btn_start, btn_info)
 
+# Clear start markup
+start_markup_cl = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+btn_start = types.KeyboardButton('Начать тест')
+start_markup_cl.add(btn_start)
+
 # Info markup
 info_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn_back = types.KeyboardButton('Начать тест')
 btn_info = types.KeyboardButton('Об авторе бота')
 info_markup.add(btn_back, btn_info)
-
-# Try again
-try_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-btn_try_again = types.KeyboardButton('Начать снова')
-try_markup.add(btn_try_again)

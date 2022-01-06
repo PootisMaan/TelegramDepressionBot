@@ -63,11 +63,11 @@ get_question = question_counter()
 # ========================   MAIN LOGIC   ==============================================================================
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, f"<b>Привет, {message.from_user.first_name}!</b>", parse_mode='html')
-    bot.send_message(message.chat.id,
-                     "Ниже приведены вопросы, касающиеся Вашего самочувствия, активности, эмоционального состояния в "
-                     "течение последнего месяца. Выберите ответ, который наилучшим образом соответствует Вашему "
-                     "сегодняшнему состоянию.")
+    bot.send_message(message.chat.id, f"<b>Привет,  {message.from_user.first_name}!</b>", parse_mode='html')
+    bot.send_message(message.chat.id, f"Ниже будут приведены вопросы, касающиеся Вашего самочувствия, активности, "
+                                      f"эмоционального состояния в течение последнего месяца.")
+    bot.send_message(message.chat.id, f"Выберите ответ, который наилучшим образом соответствует Вашему сегодняшнему "
+                                      f"состоянию.")
     bot.send_message(message.chat.id, "Желаете начать тест?", reply_markup=Markups.start_markup)
 
 
@@ -95,14 +95,15 @@ def info(message):
 
 def author(message):
     bot.send_message(message.chat.id, f"Привет!, это мой первый опыт написания Telegram бота код код можете"
-                                      "посмотреть в Github: https://github.com/dborodin836/TelegramDepressionBot")
+                                      "посмотреть в Github: https://github.com/dborodin836/TelegramDepressionBot",
+                     reply_markup=Markups.start_markup_cl)
 
 
 def get_result_and_again(message):
     evaluate(message)
     bot.send_message(message.chat.id, result.get_result())
     bot.send_message(message.chat.id, f"Желаете попробовать снова?", parse_mode='html',
-                     reply_markup=Markups.try_markup)
+                     reply_markup=Markups.start_markup)
 
 
 def test(message):
