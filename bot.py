@@ -1,6 +1,7 @@
 # Main bot file. Start with it.
 # GitHub: https://github.com/dborodin836/TelegramDepressionBot
 
+import logging
 import telebot
 from source import CalculationSystem
 import Markups
@@ -9,6 +10,7 @@ result = CalculationSystem()
 
 bot = telebot.TeleBot("1991005309:AAEEhZDkMthxz6WntlUN0XA1ClpguWb9t7k")
 
+# TODO: Add random guestions
 questions = ["Я нервничаю по поводу того, что раньше меня не беспокоило",
              "Я не получаю удовольствия от еды, у меня плохой аппетит",
              "Несмотря на помощь друзей и членов моей семьи, мне не удается избавиться от чувства тоски",
@@ -116,4 +118,9 @@ def test(message):
         bot.register_next_step_handler(question_msg, test)
 
 
-bot.polling(none_stop=True)
+try:
+    bot.polling(none_stop=True)
+except:
+    logging.error("DEAD")
+    bot.stop_polling()
+    bot.polling(none_stop=True)
