@@ -87,7 +87,9 @@ def router(message):
     elif message.text in ['qwerty']:
         save_result_db(message, 'test')
     elif message.text in ['Посмотреть историю']:
-        parse_history(message, get_history(message))
+        user_history = get_history(message)
+        mes = parse_history(message, user_history)
+        send_history_user(message, mes)
 
 
 # Sends general info about the test
@@ -156,8 +158,14 @@ def get_history(message):
 
 
 def parse_history(message, selected_results):
+    """
+    :param message: standart json
+    :param selected_results: executed query from db
+    """
+    results = []
     for element in selected_results:
-        send_history_user(message, element)
+        results.append(element)
+    return generate_message(results)
 
 
 # Gonna use it later
@@ -166,8 +174,15 @@ def save_result_ask(message):
                      reply_markup=Markups.save_result_markup)
 
 
-def send_history_user(message, dictionary):
-    bot.send_message(message.chat.id, f"{dictionary['result']} -- {dictionary['date']}")
+def generate_message(list_message: list) -> str:
+    mes = ""
+    for dictionary in list_message:
+        mes += f"➔ Результат: {dictionary['result']}\n  Дата: {dictionary['date']}\n"
+    return mes
+
+
+def send_history_user(message, mes):
+    bot.send_message(message.chat.id, mes)
 
 
 while True:
