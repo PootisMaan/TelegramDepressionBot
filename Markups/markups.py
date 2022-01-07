@@ -12,7 +12,14 @@ answers_mark.add(btn1, btn2, btn3, btn4)
 start_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn_start = types.KeyboardButton('Начать тест')
 btn_info = types.KeyboardButton('Информация')
-start_markup.add(btn_start, btn_info)
+btn_history = types.KeyboardButton('Посмотреть историю')
+start_markup.add(btn_start, btn_info, btn_history)
+
+# Save result markup
+save_result_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+btn_yes = types.KeyboardButton('Сохранить резутьтат в базу')
+btn_no = types.KeyboardButton('Не сохранять результат в базу')
+save_result_markup.add(btn_yes, btn_no)
 
 # Clear start markup
 start_markup_cl = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
