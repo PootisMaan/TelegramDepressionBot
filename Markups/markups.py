@@ -24,10 +24,12 @@ save_result_markup.add(btn_yes, btn_no)
 # Clear start markup
 start_markup_cl = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn_start = types.KeyboardButton('Начать тест')
-start_markup_cl.add(btn_start)
+btn_history = types.KeyboardButton('Посмотреть историю')
+start_markup_cl.add(btn_start, btn_history)
 
 # Info markup
 info_markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
 btn_back = types.KeyboardButton('Начать тест')
 btn_info = types.KeyboardButton('Об авторе бота')
-info_markup.add(btn_back, btn_info)
+btn_history = types.KeyboardButton('Посмотреть историю')
+info_markup.add(btn_back, btn_info, btn_history)
