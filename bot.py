@@ -34,31 +34,42 @@ questions = ["Я нервничаю по поводу того, что рань�
              "Я легко могу заплакать",
              "Я испытываю грусть, хандру",
              "Мне кажется, что люди меня не любят",
-             "У меня нет сил и желания начинать что-либо делать", ]
+             "Несмотря на помощь друзей и членов моей семьи, мне не удается избавиться от чувства тоски",
+
+             ]
 
 
 def evaluate(message):
     global result
     if message.text == "Иногда":
         result.add(1)
-    if message.text == "Значительную часть времени":
+    elif message.text == "Значительную часть времени":
         result.add(2)
-    if message.text == "Практически все время":
+    elif message.text == "Практически все время":
         result.add(3)
+    elif message.text == "Очень редко или никогда":
+        pass
+    else:
+        get_question(-1)
 
 
-def question_counter(num: int = 0):
+def question_counter():
     current = 0
 
-    def inner():
+    def inner(num):
         nonlocal current
+
+        if num == -1:
+            current -= 1
+
+        # If current question no. exceeds amount of questions
         if current == 20:
             current = 0
-        if num != -1:
+
+        if num == 1:
             current += 1
-            return current - 1
-        else:
-            current = 0
+
+        return current
 
     return inner
 
@@ -116,26 +127,32 @@ def send_rules(message):
 
 # Shows the information about author
 def author(message):
-    bot.send_message(message.chat.id, f"Привет!, это мой первый опыт написания Telegram бота код код можете"
+    bot.send_message(message.chat.id, f"Привет!, это мой первый опыт написания Telegram бота код код можете "
                                       "посмотреть в Github: https://github.com/dborodin836/TelegramDepressionBot",
                      reply_markup=Markups.start_markup_cl)
 
 
 # Gives the result to user and saves it to db
 def get_result_and_again(message):
-    evaluate(message)
-    res = result.get_result()
-    bot.send_message(message.chat.id, res)
-    bot.send_message(message.chat.id, f"Желаете попробовать снова?", parse_mode='html',
-                     reply_markup=Markups.start_markup)
-    random.shuffle(questions)
-    # save_result_ask(message)
-    save_result_db(message, res)
+    if message.text not in ["Очень редко или никогда", "Практически все время", "Значительную часть времени", "Иногда"]:
+        err_message = bot.send_message(message.chat.id, questions[-1])
+        bot.register_next_step_handler(err_message, test)
+    else:
+        evaluate(message)
+        res = result.get_result()
+        logging.info(res)
+        bot.send_message(message.chat.id, res)
+        bot.send_message(message.chat.id, f"Желаете попробовать снова?", parse_mode='html',
+                         reply_markup=Markups.start_markup)
+        random.shuffle(questions)
+        # save_result_ask(message)
+        save_result_db(message, res)
 
 
 # Starts the test
 def test(message):
-    next_question = questions[get_question()]
+    evaluate(message)
+    next_question = questions[get_question(1)]
     question_msg = bot.send_message(message.chat.id, next_question, reply_markup=Markups.answers_mark)
     if next_question == questions[-1]:
         bot.register_next_step_handler(question_msg, get_result_and_again)
@@ -158,17 +175,13 @@ def get_history(message):
 
 
 def parse_history(message, selected_results):
-    """
-    :param message: standart json
-    :param selected_results: executed query from db
-    """
     results = []
     for element in selected_results:
         results.append(element)
     return generate_message(results)
 
 
-# Gonna use it later
+# Gonna use it later or not
 def save_result_ask(message):
     bot.send_message(message.chat.id, "Хотите сохранить результат для последующего просмотра?",
                      reply_markup=Markups.save_result_markup)
